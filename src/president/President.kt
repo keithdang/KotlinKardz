@@ -5,7 +5,7 @@ public class President {
     }
 
     val players: MutableList<Player> = mutableListOf()
-    private val activeCards: MutableList<Cards> = mutableListOf()
+    val activeCards: MutableList<Cards> = mutableListOf()
     private var activeFiveCardState: FiveCardCombos = FiveCardCombos.NONE
     private val presValue: String.() -> Int = {
         presConvert(this)
@@ -37,6 +37,8 @@ public class President {
             }
         }
         if(verifyInputCards(hand,indices)){
+            activeCards.clear()
+            addEntriesIntoActiveCards(indices,hand)
             Util.removeAllIndicesFromHand(indices,hand)
         }else{
             Util.resetCardIsSelected(hand)

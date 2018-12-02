@@ -51,6 +51,24 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
                 }
             }
         }
+        div{
+            div{
+                +"Active Card(s)"
+            }
+            for(card in state.presObject.activeCards){
+                console.log(card)
+                div(cardDisplay(card.isSelected)){
+                    div{
+                        +card.getCardName()
+                    }
+                    div{
+                        +card.getSuit().toString()
+                    }
+                }
+            }
+        }
+
+
         buttonsUI(state.playTime)
     }
 }

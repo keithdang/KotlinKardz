@@ -27,7 +27,6 @@ class App : RComponent<RProps, AppState>() {
                     presObj.submit()
                 }
             }
-
             override fun clear() {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
