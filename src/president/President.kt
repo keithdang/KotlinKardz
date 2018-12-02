@@ -14,19 +14,20 @@ public class President {
     private var turnCount = 1
 
     init {
-        val deck = Deck(presValue)
-        deck.shuffleDeck()
-//        deck.sortDeckFullHouseForEachPlayer()
-//        deck.sortDifferentStraightsForEachPlayer()
-//        deck.sortFlushes()
-//        deck.sortStraightFlushes()
-//        deck.sortDeckOriginal()
-        for (i in 1..4) {
-            players.add(Player(deck.getDeck().subList((i - 1) * 13, i * 13).toMutableList()))
-            Util.sortHand(players[i - 1].getHand())
-            Util.printCardsInLine(players[i - 1].getHand())
-            players[i - 1].initializePlayer()
-        }
+        initCards()
+//        var deck = Deck(presValue)
+//        deck.shuffleDeck()
+////        deck.sortDeckFullHouseForEachPlayer()
+////        deck.sortDifferentStraightsForEachPlayer()
+////        deck.sortFlushes()
+////        deck.sortStraightFlushes()
+////        deck.sortDeckOriginal()
+//        for (i in 1..4) {
+//            players.add(Player(deck.getDeck().subList((i - 1) * 13, i * 13).toMutableList()))
+//            Util.sortHand(players[i - 1].getHand())
+//            Util.printCardsInLine(players[i - 1].getHand())
+//            players[i - 1].initializePlayer()
+//        }
     }
     var winner:String=""
     fun skip(){
@@ -36,8 +37,25 @@ public class President {
     fun clear(){
         Util.resetCardIsSelected(players[0].getHand())
     }
+    fun playAgain(){
+        initCards()
+    }
+    fun initCards(){
+        players.clear()
+        winner=""
+        activeCards.clear()
+        var deck = Deck(presValue)
+        deck.shuffleDeck()
+        for (i in 1..4) {
+            players.add(Player(deck.getDeck().subList((i - 1) * 13, i * 13).toMutableList()))
+            Util.sortHand(players[i - 1].getHand())
+            Util.printCardsInLine(players[i - 1].getHand())
+            players[i - 1].initializePlayer()
+        }
+    }
     fun computerPlayers(){
         for (i in 2..players.size) {
+
             playerTurn(i)
             if (players[i - 1].getHand().isEmpty()) {
                 announceWinner(i)

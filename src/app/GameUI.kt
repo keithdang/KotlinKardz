@@ -4,6 +4,7 @@ import kotlinx.html.js.onClickFunction
 import react.*
 import react.dom.div
 import President
+import react.dom.button
 import react.dom.h2
 
 interface GameProps : RProps {
@@ -20,6 +21,7 @@ interface Play {
     fun submit()
     fun clear()
     fun skip()
+    fun playAgain()
 }
 
 class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
@@ -32,6 +34,12 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
         if(state.presObject.winner.isNotEmpty()){
             h2 {
                 +state.presObject.winner
+            }
+            button {
+                +"Play Again"
+                attrs.onClickFunction={
+                    state.playTime.playAgain()
+                }
             }
         }else{
             for((index,player) in state.presObject.players.withIndex()){
@@ -54,7 +62,9 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
                                     setState{
                                         card.isSelected=!card.isSelected
                                     }
+
                                 }
+
                             }
                         }
                     }

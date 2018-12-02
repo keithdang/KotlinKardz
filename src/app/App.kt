@@ -37,6 +37,12 @@ class App : RComponent<RProps, AppState>() {
                     presObj.skip()
                 }
             }
+
+            override fun playAgain() {
+                setState {
+                    presObj.playAgain()
+                }
+            }
         })
     }
 }
