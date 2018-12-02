@@ -34,3 +34,6 @@ body {
 .hand{
   display: flex;
 }
+.active{
+  display: inline-flex;
+}

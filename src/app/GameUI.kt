@@ -55,14 +55,16 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
             div{
                 +"Active Card(s)"
             }
-            for(card in state.presObject.activeCards){
-                console.log(card)
-                div(cardDisplay(card.isSelected)){
-                    div{
-                        +card.getCardName()
-                    }
-                    div{
-                        +card.getSuit().toString()
+            div("active"){
+                for(card in state.presObject.activeCards){
+                    console.log(card)
+                    div(cardDisplay(card.isSelected)){
+                        div{
+                            +card.getCardName()
+                        }
+                        div{
+                            +card.getSuit().toString()
+                        }
                     }
                 }
             }

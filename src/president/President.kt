@@ -1,4 +1,5 @@
 //820->700
+
 public class President {
     enum class FiveCardCombos {
         NONE, STRAIGHT, FULL_HOUSE, FLUSH, STRAIGHT_FLUSH, ROYAL_FLUSH
@@ -27,8 +28,10 @@ public class President {
             players[i - 1].initializePlayer()
         }
     }
+
     fun submit(){
         console.log("submit")
+        if (turnCount == 4) activeCards.clear()
         var hand=players[0].getHand()
         var indices:MutableList<Int> = mutableListOf()
         for((index,card) in hand.withIndex()){
@@ -37,9 +40,27 @@ public class President {
             }
         }
         if(verifyInputCards(hand,indices)){
-            activeCards.clear()
-            addEntriesIntoActiveCards(indices,hand)
-            Util.removeAllIndicesFromHand(indices,hand)
+            if (burned(hand, indices)) {
+                activeCards.clear()
+                addEntriesIntoActiveCards(indices,hand)
+                Util.removeAllIndicesFromHand(indices,hand)
+                activeCards.clear()
+                turnCount = 1
+            }else{
+                activeCards.clear()
+                addEntriesIntoActiveCards(indices,hand)
+                Util.removeAllIndicesFromHand(indices,hand)
+                turnCount = 1
+                for (i in 2..players.size) {
+
+                    playerTurn(i)
+                    if (players[i - 1].getHand().isEmpty()) {
+                        println("Player $i wins")
+                        break
+                    }
+                }
+            }
+
         }else{
             Util.resetCardIsSelected(hand)
         }
@@ -61,54 +82,50 @@ public class President {
 //        }
 //    }
 
-//    private fun playerTurn(num: Int) {
-//        print("Player: $num\n")
-//        val hand = players[num - 1].getHand()
-//        Util.printCardsInLine(hand)
-//        var goAgain = false
-//        if (turnCount == 4) activeCards.clear()
-//        val indices: List<Int> = getIndex(num)
+    private fun playerTurn(num: Int) {
+        print("Player: $num\n")
+        val hand = players[num - 1].getHand()
+        Util.printCardsInLine(hand)
+        var goAgain = false
+        if (turnCount == 4) activeCards.clear()
+        val indices: List<Int> = getIndex(num)
+
+        if (indices.isNotEmpty() && indices[0] != -1) {
+            Util.printIndicesOfHand(indices, hand)
+            if (burned(hand, indices)) {
+                println("BURN")
+                goAgain = true
+                activeCards.clear()
+            } else {
+                activeCards.clear()
+                addEntriesIntoActiveCards(indices, hand)
+            }
+            Util.removeAllIndicesFromHand(indices, hand)
+            if (goAgain && hand.size > 0) playerTurn(num)
+            turnCount = 1
+        } else {
+            println("Player $num couldn't go")
+            turnCount++
+        }
+    }
 //
-//        if (indices.isNotEmpty() && indices[0] != -1) {
-//            Util.printIndicesOfHand(indices, hand)
-//            if (burned(hand, indices)) {
-//                println("BURN")
-//                goAgain = true
-//                activeCards.clear()
-//            } else {
-//                activeCards.clear()
-//                addEntriesIntoActiveCards(indices, hand)
-//            }
-//            Util.removeAllIndicesFromHand(indices, hand)
-//            if (goAgain && hand.size > 0) playerTurn(num)
-//            turnCount = 1
-//        } else {
-//            println("Player $num couldn't go")
-//            turnCount++
-//        }
-//    }
-//
-//    private fun getIndex(playerNum: Int): MutableList<Int> {
-//        var indices: MutableList<Int> = mutableListOf()
-//        val player = players[playerNum - 1]
-//        player.initializePlayer()
-//        val hand: MutableList<Cards> = player.getHand()
-//        if (activeCards.isEmpty() || hand.last() >= activeCards[0]) {
-//            if (playerNum == 1) {
-//                indices = inputCard(hand)
-//            } else {
-//                when (activeCards.size) {
-//                    0 -> indices.add(0)
-//                    1 -> indices.add(Util.searchCard(hand, 0, hand.size - 1, activeCards[0]))
-//                    2 -> handleIdenticalCards(player, hand, indices, 2)
-//                    3 -> handleIdenticalCards(player, hand, indices, 3)
-//                    4 -> handleIdenticalCards(player, hand, indices, 4)
-//                    5 -> computerDetectFiveCardCombos(player, hand, indices)
-//                }
-//            }
-//        }
-//        return indices
-//    }
+    private fun getIndex(playerNum: Int): MutableList<Int> {
+        var indices: MutableList<Int> = mutableListOf()
+        val player = players[playerNum - 1]
+        player.initializePlayer()
+        val hand: MutableList<Cards> = player.getHand()
+        if (activeCards.isEmpty() || hand.last() >= activeCards[0]) {
+            when (activeCards.size) {
+                0 -> indices.add(0)
+                1 -> indices.add(Util.searchCard(hand, 0, hand.size - 1, activeCards[0]))
+                2 -> handleIdenticalCards(player, hand, indices, 2)
+                3 -> handleIdenticalCards(player, hand, indices, 3)
+                4 -> handleIdenticalCards(player, hand, indices, 4)
+                5 -> computerDetectFiveCardCombos(player, hand, indices)
+            }
+        }
+        return indices
+    }
 //
     private fun verifyInputCards(hand: MutableList<Cards>, numIndices:MutableList<Int>): Boolean {
 //        print("Select Card (s for skip):\n")
@@ -124,7 +141,20 @@ public class President {
             when {
                 activeCards.size > 1 -> return false
                 activeCards.size == 0 -> return true
-                hand[numIndices[0]].getPerceivedValue() > activeCards[0].getPerceivedValue() -> return true
+                hand[numIndices[0]].getPerceivedValue() >= activeCards[0].getPerceivedValue() -> return true
+                else -> return false
+            }
+        }
+        2, 3, 4 -> {
+            when {
+                numIndices.all { checkValidEntry(it, hand) } && checkIfIndicesHaveSameCardPerceivedValue(numIndices, hand) -> return true
+                else -> return false
+            }
+        }
+        5 -> {
+//            numIndices.sortBy { it }
+            when {
+                handleFiveCardCombinations(hand, numIndices) -> return true
                 else -> return false
             }
         }

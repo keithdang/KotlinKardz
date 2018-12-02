@@ -18,7 +18,7 @@ class App : RComponent<RProps, AppState>() {
         div("App-header") {
             logo()
             h2 {
-                +"Welcome to React with Kotlin"
+                +"Kotlin React President"
             }
         }
         GameUI(state.presObj,object: Play{
