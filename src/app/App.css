@@ -1,0 +1,36 @@
+body {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #000;
+  height: 160px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-ticker {
+  font-size: medium;
+}
+.card{
+  font-size: medium;
+  /*background: chartreuse;*/
+  width: 5rem;
+  padding: 13px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-right: 1rem;
+}
+.isSelected{
+  background: chartreuse;
+}
+.notSelected{
+  background: aliceblue;
+}
+.hand{
+  display: flex;
+}
