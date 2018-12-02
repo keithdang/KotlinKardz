@@ -28,6 +28,7 @@ public class President {
             players[i - 1].initializePlayer()
         }
     }
+    var winner:String=""
     fun skip(){
         turnCount++
         computerPlayers()
@@ -39,13 +40,12 @@ public class President {
         for (i in 2..players.size) {
             playerTurn(i)
             if (players[i - 1].getHand().isEmpty()) {
-                println("Player $i wins")
+                announceWinner(i)
                 break
             }
         }
     }
     fun submit(){
-        console.log("submit")
         if (turnCount == 4) activeCards.clear()
         var hand=players[0].getHand()
         var indices:MutableList<Int> = mutableListOf()
@@ -65,6 +65,9 @@ public class President {
                 activeCards.clear()
                 addEntriesIntoActiveCards(indices,hand)
                 Util.removeAllIndicesFromHand(indices,hand)
+                if(hand.size==0){
+                    announceWinner(1)
+                }
                 turnCount = 1
                 computerPlayers()
             }
@@ -72,9 +75,10 @@ public class President {
         }else{
             Util.resetCardIsSelected(hand)
         }
-
     }
-
+    private fun announceWinner(num:Int){
+        winner="Player $num wins!"
+    }
 //    fun start() {
 //        println("President")
 //        var gameContinue = true

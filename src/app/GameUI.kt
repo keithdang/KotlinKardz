@@ -4,6 +4,7 @@ import kotlinx.html.js.onClickFunction
 import react.*
 import react.dom.div
 import President
+import react.dom.h2
 
 interface GameProps : RProps {
     var presObject: President
@@ -28,51 +29,57 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
     }
 
     override fun RBuilder.render() {
-        for((index,player) in state.presObject.players.withIndex()){
+        if(state.presObject.winner.isNotEmpty()){
+            h2 {
+                +state.presObject.winner
+            }
+        }else{
+            for((index,player) in state.presObject.players.withIndex()){
 //            console.log("Player ${index+1}")
 //            player.printHand()
-            div {
-                +"Player ${index+1}"
-            }
-            div("hand"){
-                for(card in player.getHand()){
-                    div(cardDisplay(card.isSelected)){
-                        div{
-                            +card.getCardName()
-                        }
-                        div{
-                            +card.getSuit().toString()
-                        }
-                        attrs.onClickFunction={
-                            setState{
-                                card.isSelected=!card.isSelected
+                div {
+                    +"Player ${index+1}"
+                }
+                div("hand"){
+                    for(card in player.getHand()){
+                        div(cardDisplay(card.isSelected)){
+                            div{
+                                +card.getCardName()
+                            }
+                            div{
+                                +card.getSuit().toString()
+                            }
+                            if(index==0){
+                                attrs.onClickFunction={
+                                    setState{
+                                        card.isSelected=!card.isSelected
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        div{
             div{
-                +"Active Card(s)"
-            }
-            div("active"){
-                for(card in state.presObject.activeCards){
-                    console.log(card)
-                    div(cardDisplay(card.isSelected)){
-                        div{
-                            +card.getCardName()
-                        }
-                        div{
-                            +card.getSuit().toString()
+                div{
+                    +"Active Card(s)"
+                }
+                div("active"){
+                    for(card in state.presObject.activeCards){
+                        console.log(card)
+                        div(cardDisplay(card.isSelected)){
+                            div{
+                                +card.getCardName()
+                            }
+                            div{
+                                +card.getSuit().toString()
+                            }
                         }
                     }
                 }
             }
+            buttonsUI(state.playTime)
         }
-
-
-        buttonsUI(state.playTime)
     }
 }
 fun cardDisplay(isSelected:Boolean):String=when(isSelected){
