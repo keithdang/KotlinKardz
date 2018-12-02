@@ -19,5 +19,11 @@ fun RBuilder.buttonsUI(play: Play){
                 play.clear()
             }
         }
+        button{
+            +"Skip"
+            attrs.onClickFunction={
+                play.skip()
+            }
+        }
     }
 }

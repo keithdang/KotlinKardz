@@ -28,7 +28,14 @@ class App : RComponent<RProps, AppState>() {
                 }
             }
             override fun clear() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                setState{
+                    presObj.clear()
+                }
+            }
+            override fun skip() {
+                setState{
+                    presObj.skip()
+                }
             }
         })
     }

@@ -18,6 +18,7 @@ interface GameState : RState {
 interface Play {
     fun submit()
     fun clear()
+    fun skip()
 }
 
 class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {

@@ -28,7 +28,22 @@ public class President {
             players[i - 1].initializePlayer()
         }
     }
-
+    fun skip(){
+        turnCount++
+        computerPlayers()
+    }
+    fun clear(){
+        Util.resetCardIsSelected(players[0].getHand())
+    }
+    fun computerPlayers(){
+        for (i in 2..players.size) {
+            playerTurn(i)
+            if (players[i - 1].getHand().isEmpty()) {
+                println("Player $i wins")
+                break
+            }
+        }
+    }
     fun submit(){
         console.log("submit")
         if (turnCount == 4) activeCards.clear()
@@ -51,14 +66,7 @@ public class President {
                 addEntriesIntoActiveCards(indices,hand)
                 Util.removeAllIndicesFromHand(indices,hand)
                 turnCount = 1
-                for (i in 2..players.size) {
-
-                    playerTurn(i)
-                    if (players[i - 1].getHand().isEmpty()) {
-                        println("Player $i wins")
-                        break
-                    }
-                }
+                computerPlayers()
             }
 
         }else{
