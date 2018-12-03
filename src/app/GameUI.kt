@@ -35,29 +35,41 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
         if(state.presObject.winner.isNotEmpty()){
             restartUI()
         }else{
-            for((index,player) in state.presObject.players.withIndex()){
-                h4("header") {
-                    +"Player ${index+1}"
-                }
-                div("hand"){
-                    for(card in player.getHand()){
-                        cardUI(card,card.isSelected,index==0)
+            div("players"){
+                for((index,player) in state.presObject.players.withIndex()){
+                    div("hands"){
+                        handUI(player.getHand(),index+1)
+                        handUI(player.lastPlayed,index+1,false,true)
                     }
                 }
             }
-            h4("header") {
-                +"Active Card(s)"
-            }
-            div("hand"){
-                for(card in state.presObject.activeCards){
-                    cardUI(card,false,false)
-                }
-            }
+            handUI(state.presObject.activeCards,0,true,false)
             br {  }
             buttonsUI(state.playTime)
         }
     }
 
+    private fun RBuilder.handUI(hand:MutableList<Cards>,num:Int,isActive:Boolean=false,isLastPlayed:Boolean=false){
+        if(num!=1 || !isLastPlayed) {
+            div(if(isLastPlayed) "lastPlayed" else ""){
+                h4("header") {
+                    +when {
+                        isActive -> "Active Cards(s)"
+                        isLastPlayed -> "Last Played"
+                        else -> "Player $num"
+                    }
+                }
+                div("hand") {
+                    for (card in hand) {
+                        when (isActive || isLastPlayed) {
+                            true -> cardUI(card, false, false)
+                            false -> cardUI(card, card.isSelected, num == 1)
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun RBuilder.restartUI(){
         h2 {
             +state.presObject.winner
@@ -86,6 +98,13 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
         }
     }
 
+    private fun handDisplay(isLastPlayed: Boolean):String{
+        var word="hand"
+        if(isLastPlayed){
+            word+=" lastPlayed"
+        }
+        return word
+    }
     private fun cardDisplay(isSelected:Boolean):String=when(isSelected){
         true->"card isSelected"
         false->"card notSelected"

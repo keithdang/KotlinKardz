@@ -1,5 +1,6 @@
 public class Player(private val hand:MutableList<Cards>){
     fun getHand():MutableList<Cards> = hand
+    var lastPlayed: MutableList<Cards> = mutableListOf()
     private var doublesInHand:MutableList<MutableList<Cards>> = mutableListOf()
     private var triplesInHand:MutableList<MutableList<Cards>> = mutableListOf()
     private var quadsInHand:MutableList<MutableList<Cards>> = mutableListOf()
@@ -113,6 +114,13 @@ public class Player(private val hand:MutableList<Cards>){
                     }
                 }
             }
+        }
+    }
+
+    fun updateCardsPlayed(indices: List<Int>) {
+        lastPlayed.clear()
+        for (i in indices) {
+            lastPlayed.add(hand[i])
         }
     }
     fun getDoubles():MutableList<MutableList<Cards>>  = doublesInHand

@@ -47,7 +47,6 @@ public class President {
     }
     fun computerPlayers(){
         for (i in 2..players.size) {
-
             playerTurn(i)
             if (players[i - 1].getHand().isEmpty()) {
                 announceWinner(i)
@@ -65,7 +64,7 @@ public class President {
                 indices.add(index)
             }
         }
-        if(verifyInputCards(hand,indices)){
+        if(indices.isNotEmpty() && verifyInputCards(hand,indices)){
             if (burned(hand, indices)) {
                 activeCards.clear()
                 addEntriesIntoActiveCards(indices,hand)
@@ -76,13 +75,12 @@ public class President {
                 activeCards.clear()
                 addEntriesIntoActiveCards(indices,hand)
                 Util.removeAllIndicesFromHand(indices,hand)
-                if(hand.size==0){
-                    announceWinner(1)
-                }
                 turnCount = 1
                 computerPlayers()
             }
-
+            if(hand.size==0){
+                announceWinner(1)
+            }
         }else{
             Util.resetCardIsSelected(hand)
         }
@@ -94,7 +92,8 @@ public class President {
 
     private fun playerTurn(num: Int) {
         print("Player: $num\n")
-        val hand = players[num - 1].getHand()
+        var player=players[num - 1]
+        val hand = player.getHand()
         Util.printCardsInLine(hand)
         var goAgain = false
         if (turnCount == 4) activeCards.clear()
@@ -110,6 +109,7 @@ public class President {
                 activeCards.clear()
                 addEntriesIntoActiveCards(indices, hand)
             }
+            player.updateCardsPlayed(indices)
             Util.removeAllIndicesFromHand(indices, hand)
             if (goAgain && hand.size > 0) playerTurn(num)
             turnCount = 1

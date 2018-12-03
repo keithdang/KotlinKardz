@@ -29,7 +29,8 @@ body {
   padding: 13px;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  margin-right: 1rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
   border-style: double;
   border-width: 5px;
   border-radius: 5px;
@@ -43,8 +44,14 @@ body {
   background: aliceblue;
 }
 
+.hands{
+  display: inline-flex;
+}
+
 .hand{
   display: inline-flex;
+  border-style: groove;
+  border-width: 5px;
 }
 
 .active{
@@ -74,4 +81,13 @@ body {
 
 .header{
   margin: 0;
+  padding-bottom: 5px;
+}
+
+.players{
+  display: inline-grid;
+}
+
+.lastPlayed{
+  margin-left: 20px;
 }
