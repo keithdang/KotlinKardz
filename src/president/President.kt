@@ -15,19 +15,6 @@ public class President {
 
     init {
         initCards()
-//        var deck = Deck(presValue)
-//        deck.shuffleDeck()
-////        deck.sortDeckFullHouseForEachPlayer()
-////        deck.sortDifferentStraightsForEachPlayer()
-////        deck.sortFlushes()
-////        deck.sortStraightFlushes()
-////        deck.sortDeckOriginal()
-//        for (i in 1..4) {
-//            players.add(Player(deck.getDeck().subList((i - 1) * 13, i * 13).toMutableList()))
-//            Util.sortHand(players[i - 1].getHand())
-//            Util.printCardsInLine(players[i - 1].getHand())
-//            players[i - 1].initializePlayer()
-//        }
     }
     var winner:String=""
     fun skip(){
@@ -46,6 +33,11 @@ public class President {
         activeCards.clear()
         var deck = Deck(presValue)
         deck.shuffleDeck()
+        ////        deck.sortDeckFullHouseForEachPlayer()
+////        deck.sortDifferentStraightsForEachPlayer()
+////        deck.sortFlushes()
+////        deck.sortStraightFlushes()
+////        deck.sortDeckOriginal()
         for (i in 1..4) {
             players.add(Player(deck.getDeck().subList((i - 1) * 13, i * 13).toMutableList()))
             Util.sortHand(players[i - 1].getHand())
@@ -63,6 +55,7 @@ public class President {
             }
         }
     }
+
     fun submit(){
         if (turnCount == 4) activeCards.clear()
         var hand=players[0].getHand()
@@ -94,23 +87,10 @@ public class President {
             Util.resetCardIsSelected(hand)
         }
     }
+
     private fun announceWinner(num:Int){
         winner="Player $num wins!"
     }
-//    fun start() {
-//        println("President")
-//        var gameContinue = true
-//        while (gameContinue) {
-//            for (i in 1..players.size) {
-//                playerTurn(i)
-//                if (players[i - 1].getHand().isEmpty()) {
-//                    gameContinue = false
-//                    println("Player $i wins")
-//                    break
-//                }
-//            }
-//        }
-//    }
 
     private fun playerTurn(num: Int) {
         print("Player: $num\n")
@@ -158,92 +138,30 @@ public class President {
     }
 //
     private fun verifyInputCards(hand: MutableList<Cards>, numIndices:MutableList<Int>): Boolean {
-//        print("Select Card (s for skip):\n")
-//        var numList: MutableList<Int> = mutableListOf()
-//        val input = readLine()!!
-//        val inputList = input.split(",").toMutableList()
-//        var numIndices: MutableList<Int> = mutableListOf()
-//        if (inputList.size > 1) {
-//            numIndices = inputList.map { it.toInt() - 1 }.toMutableList()
-//        }
-    when (numIndices.size) {
-        1 -> {
-            when {
-                activeCards.size > 1 -> return false
-                activeCards.size == 0 -> return true
-                hand[numIndices[0]].getPerceivedValue() >= activeCards[0].getPerceivedValue() -> return true
-                else -> return false
+        var verified=false
+        when (numIndices.size) {
+            1 -> {
+                when {
+                    activeCards.size == 0 -> verified=true
+                    hand[numIndices[0]].getPerceivedValue() >= activeCards[0].getPerceivedValue() -> verified=true
+                }
+            }
+            2, 3, 4 -> {
+                when {
+                    numIndices.all { checkValidEntry(it, hand) } && checkIfIndicesHaveSameCardPerceivedValue(numIndices, hand) -> verified=true
+                }
+            }
+            5 -> {
+                when {
+                    handleFiveCardCombinations(hand, numIndices) -> verified=true
+                }
             }
         }
-        2, 3, 4 -> {
-            when {
-                numIndices.all { checkValidEntry(it, hand) } && checkIfIndicesHaveSameCardPerceivedValue(numIndices, hand) -> return true
-                else -> return false
-            }
+        //if user is able to select a new card combination that's not length 5 and it wasn't a skip
+        if (numIndices.size < 5 && numIndices[0] != -1) {
+            activeFiveCardState = FiveCardCombos.NONE
         }
-        5 -> {
-//            numIndices.sortBy { it }
-            when {
-                handleFiveCardCombinations(hand, numIndices) -> return true
-                else -> return false
-            }
-        }
-        else->return false
-//        2, 3, 4 -> {
-//            when {
-//                numIndices.all { checkValidEntry(it, hand) } && checkIfIndicesHaveSameCardPerceivedValue(numIndices, hand) -> numList = numIndices
-//                else -> numList = inputCard(hand)
-//            }
-//        }
-//        5 -> {
-//            numIndices.sortBy { it }
-//            when {
-//                handleFiveCardCombinations(hand, numIndices) -> numList = numIndices
-//                else -> numList = inputCard(hand)
-//            }
-//        }
-//        else -> numList = inputCard(hand)
-    }
-    //if user is able to select a new card combination thats not length 5 and it wasn't a skip
-//    if (numList.size < 5 && numList[0] != -1) {
-//        activeFiveCardState = FiveCardCombos.NONE
-//    }
-    return true
-//        when (inputList.size) {
-//            1 -> {
-//                when {
-//                    inputList[0].equals("s") -> numList.add(-1)
-//                    activeCards.size > 1 -> numList = inputCard(hand)
-//                    inputList[0].toIntOrNull() != null -> {
-//                        var numIndex: Int = input.toInt() - 1
-//                        when {
-//                            checkValidEntry(numIndex, hand) -> numList.add(numIndex)
-//                            else -> numList = inputCard(hand)
-//                        }
-//                    }
-//                    else -> numList = inputCard(hand)
-//                }
-//            }
-//            2, 3, 4 -> {
-//                when {
-//                    numIndices.all { checkValidEntry(it, hand) } && checkIfIndicesHaveSameCardPerceivedValue(numIndices, hand) -> numList = numIndices
-//                    else -> numList = inputCard(hand)
-//                }
-//            }
-//            5 -> {
-//                numIndices.sortBy { it }
-//                when {
-//                    handleFiveCardCombinations(hand, numIndices) -> numList = numIndices
-//                    else -> numList = inputCard(hand)
-//                }
-//            }
-//            else -> numList = inputCard(hand)
-//        }
-//        //if user is able to select a new card combination thats not length 5 and it wasn't a skip
-//        if (numList.size < 5 && numList[0] != -1) {
-//            activeFiveCardState = FiveCardCombos.NONE
-//        }
-//        return numList
+        return verified
     }
 
     private fun checkValidEntry(input: Int, hand: MutableList<Cards>): Boolean =
@@ -259,17 +177,13 @@ public class President {
         return true
     }
 
-    private fun presConvert(card: String): Int {
-        val newVal: Int
-        when (card) {
-            "Jack" -> newVal = 11
-            "Queen" -> newVal = 12
-            "King" -> newVal = 13
-            "Ace" -> newVal = 14
-            "2" -> newVal = 15
-            else -> newVal = card.toInt()
-        }
-        return newVal
+    private fun presConvert(card: String): Int = when (card) {
+        "J" ->  11
+        "Q" -> 12
+        "K" -> 13
+        "A" -> 14
+        "2" -> 15
+        else -> card.toInt()
     }
 
     private fun addEntriesIntoActiveCards(indices: List<Int>, hand: MutableList<Cards>) {

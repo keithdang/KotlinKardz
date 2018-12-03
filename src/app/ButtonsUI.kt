@@ -6,23 +6,29 @@ import react.dom.button
 import react.dom.div
 
 fun RBuilder.buttonsUI(play: Play){
-    div {
-        button {
+    div ("buttonList"){
+        div("button") {
             +"Submit"
             attrs.onClickFunction={
                 play.submit()
             }
         }
-        button {
+        div("button") {
             +"Clear"
             attrs.onClickFunction={
                 play.clear()
             }
         }
-        button{
+        div("button") {
             +"Skip"
             attrs.onClickFunction={
                 play.skip()
+            }
+        }
+        div("button") {
+            +"Restart"
+            attrs.onClickFunction={
+                play.playAgain()
             }
         }
     }

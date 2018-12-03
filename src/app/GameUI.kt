@@ -2,10 +2,11 @@ package app
 
 import kotlinx.html.js.onClickFunction
 import react.*
-import react.dom.div
 import President
-import react.dom.button
-import react.dom.h2
+import Cards
+import logo.reactLogo
+import logo.suitLogo
+import react.dom.*
 
 interface GameProps : RProps {
     var presObject: President
@@ -32,71 +33,65 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
 
     override fun RBuilder.render() {
         if(state.presObject.winner.isNotEmpty()){
-            h2 {
-                +state.presObject.winner
-            }
-            button {
-                +"Play Again"
-                attrs.onClickFunction={
-                    state.playTime.playAgain()
-                }
-            }
+            restartUI()
         }else{
             for((index,player) in state.presObject.players.withIndex()){
-//            console.log("Player ${index+1}")
-//            player.printHand()
-                div {
+                h4("header") {
                     +"Player ${index+1}"
                 }
                 div("hand"){
                     for(card in player.getHand()){
-                        div(cardDisplay(card.isSelected)){
-                            div{
-                                +card.getCardName()
-                            }
-                            div{
-                                +card.getSuit().toString()
-                            }
-                            if(index==0){
-                                attrs.onClickFunction={
-                                    setState{
-                                        card.isSelected=!card.isSelected
-                                    }
-
-                                }
-
-                            }
-                        }
+                        cardUI(card,card.isSelected,index==0)
                     }
                 }
             }
-            div{
-                div{
-                    +"Active Card(s)"
-                }
-                div("active"){
-                    for(card in state.presObject.activeCards){
-                        console.log(card)
-                        div(cardDisplay(card.isSelected)){
-                            div{
-                                +card.getCardName()
-                            }
-                            div{
-                                +card.getSuit().toString()
-                            }
-                        }
-                    }
+            h4("header") {
+                +"Active Card(s)"
+            }
+            div("hand"){
+                for(card in state.presObject.activeCards){
+                    cardUI(card,false,false)
                 }
             }
+            br {  }
             buttonsUI(state.playTime)
         }
     }
+
+    private fun RBuilder.restartUI(){
+        h2 {
+            +state.presObject.winner
+        }
+        div("button") {
+            +"Play Again"
+            attrs.onClickFunction={
+                state.playTime.playAgain()
+            }
+        }
+    }
+
+    private fun RBuilder.cardUI(card: Cards, select:Boolean, enableSelect:Boolean){
+        div(cardDisplay(select)) {
+            div {
+                +card.getCardName()
+            }
+            suitLogo(card.getSuit())
+            if(enableSelect){
+                attrs.onClickFunction={
+                    setState{
+                        card.isSelected=!card.isSelected
+                    }
+                }
+            }
+        }
+    }
+
+    private fun cardDisplay(isSelected:Boolean):String=when(isSelected){
+        true->"card isSelected"
+        false->"card notSelected"
+    }
 }
-fun cardDisplay(isSelected:Boolean):String=when(isSelected){
-    true->"card isSelected"
-    false->"card notSelected"
-}
-fun RBuilder.GameUI(pres: President, play: Play) = child(GameUI::class) {
+fun RBuilder.gameUI(pres: President, play: Play) = child(GameUI::class) {
     attrs.presObject = pres
     attrs.playTime = play
 }

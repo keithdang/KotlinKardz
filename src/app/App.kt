@@ -16,12 +16,22 @@ class App : RComponent<RProps, AppState>() {
     }
     override fun RBuilder.render() {
         div("App-header") {
-            logo()
-            h2 {
-                +"Kotlin React President"
+            div("subheader"){
+                logo()
+                div("headerText"){
+                    h2("header") {
+                        +"Kotlin"
+                    }
+                    h2("header") {
+                        +"React"
+                    }
+                    h2("header") {
+                        +"President"
+                    }
+                }
             }
         }
-        GameUI(state.presObj,object: Play{
+        gameUI(state.presObj,object: Play{
             override fun submit() {
                 setState{
                     presObj.submit()

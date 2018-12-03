@@ -4,11 +4,17 @@ body {
 
 .App-header {
   background-color: #000;
-  height: 160px;
+  height: 100px;
   padding: 20px;
   color: white;
+  margin-bottom: 15px;
 }
-
+.subheader{
+  display: inline-flex;
+}
+.headerText{
+  padding-top: 10px;
+}
 .App-intro {
   font-size: large;
 }
@@ -16,24 +22,56 @@ body {
 .App-ticker {
   font-size: medium;
 }
+
 .card{
   font-size: medium;
-  /*background: chartreuse;*/
-  width: 5rem;
+  width: 1.5rem;
   padding: 13px;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   margin-right: 1rem;
+  border-style: double;
+  border-width: 5px;
+  border-radius: 5px;
 }
+
 .isSelected{
-  background: chartreuse;
+  background: lightskyblue;
 }
+
 .notSelected{
   background: aliceblue;
 }
+
 .hand{
-  display: flex;
+  display: inline-flex;
 }
+
 .active{
   display: inline-flex;
+}
+
+.button{
+  display: inline-grid;
+  width: 5rem;
+  padding:10px;
+  margin-left:5px;
+  margin-right:5px;
+  font-size: medium;
+  font-weight: 700;
+  background: lightgray;
+  border-style: double;
+  border-width: 5px;
+  border-radius: 5px;
+}
+.button:active{
+  background: dimgray;
+}
+
+.buttonList{
+  display: inline-flex;
+}
+
+.header{
+  margin: 0;
 }

@@ -46,10 +46,10 @@ object Util{
     fun genCardName(num:Int):String{
         val cardName:String
         when(num){
-            11->cardName="Jack"
-            12->cardName="Queen"
-            13->cardName="King"
-            1->cardName="Ace"
+            11->cardName="J"
+            12->cardName="Q"
+            13->cardName="K"
+            1->cardName="A"
             else->cardName=num.toString()
         }
         return cardName
