@@ -60,14 +60,26 @@ class GameUI(props: GameProps) : RComponent<GameProps, GameState>(props) {
                     }
                 }
                 div("hand") {
-                    for (card in hand) {
-                        when (isActive || isLastPlayed) {
-                            true -> cardUI(card, false, false)
-                            false -> cardUI(card, card.isSelected, num == 1)
+                    when{
+                        isActive && state.presObject.gameStarted && hand.isEmpty()->handMessage("Burned")
+                        isLastPlayed && state.presObject.gameStarted && hand.isEmpty()->handMessage("Can't Go")
+                        else->for (card in hand)
+                        {
+                            when (isActive || isLastPlayed)
+                            {
+                                true -> cardUI(card, false, false)
+                                false -> cardUI(card, card.isSelected, num == 1)
+                            }
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun RBuilder.handMessage(sentence:String){
+        p("message"){
+            +sentence
         }
     }
     private fun RBuilder.restartUI(){

@@ -91,3 +91,8 @@ body {
 .lastPlayed{
   margin-left: 20px;
 }
+
+.message{
+  font-weight: 300;
+  padding: 24px 5px;
+}

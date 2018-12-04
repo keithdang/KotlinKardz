@@ -7,6 +7,7 @@ public class President {
 
     val players: MutableList<Player> = mutableListOf()
     val activeCards: MutableList<Cards> = mutableListOf()
+    var gameStarted=false
     private var activeFiveCardState: FiveCardCombos = FiveCardCombos.NONE
     private val presValue: String.() -> Int = {
         presConvert(this)
@@ -25,6 +26,7 @@ public class President {
         Util.resetCardIsSelected(players[0].getHand())
     }
     fun playAgain(){
+        gameStarted=false
         initCards()
     }
     fun initCards(){
@@ -54,8 +56,8 @@ public class President {
             }
         }
     }
-
     fun submit(){
+        gameStarted=true
         if (turnCount == 4) activeCards.clear()
         var hand=players[0].getHand()
         var indices:MutableList<Int> = mutableListOf()
@@ -114,7 +116,7 @@ public class President {
             if (goAgain && hand.size > 0) playerTurn(num)
             turnCount = 1
         } else {
-            println("Player $num couldn't go")
+            player.lastPlayed.clear()
             turnCount++
         }
     }
